@@ -1,5 +1,5 @@
 # sbpf-nano-toolchain
-Rebuild of toolchain from programming language to SBPF bytecode pipeline, built in educational purposes
+Rebuild of toolchain from programming language to SBPF bytecode pipeline, built for educational purposes
 
 # License
-Dual licensing - MIT or Apache 2.0
+Dual licensing - [MIT](LICENSE-MIT) OR [Apache 2.0](LICENSE-APACHE) at your option
