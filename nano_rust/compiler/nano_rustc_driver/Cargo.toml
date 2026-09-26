@@ -1,0 +1,10 @@
+[package]
+name = "nano_rustc_driver"
+version = "0.0.0"
+edition = "2024"
+
+[lib]
+crate-type = ["dylib"]
+
+[dependencies]
+nano_rustc_driver_impl = { path = "../nano_rustc_driver_impl" }
