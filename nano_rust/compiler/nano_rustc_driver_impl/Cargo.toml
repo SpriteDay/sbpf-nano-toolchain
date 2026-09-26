@@ -4,3 +4,4 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+nano_rustc_span = { path = "../nano_rustc_span" }

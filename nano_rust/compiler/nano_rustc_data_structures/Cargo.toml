@@ -1,0 +1,6 @@
+[package]
+name = "nano_rustc_data_structures"
+version = "0.0.0"
+edition = "2024"
+
+[dependencies]

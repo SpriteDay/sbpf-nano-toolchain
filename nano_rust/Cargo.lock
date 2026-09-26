@@ -10,6 +10,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "nano_rustc_data_structures"
+version = "0.0.0"
+
+[[package]]
 name = "nano_rustc_driver"
 version = "0.0.0"
 dependencies = [
@@ -19,3 +23,13 @@ dependencies = [
 [[package]]
 name = "nano_rustc_driver_impl"
 version = "0.1.0"
+dependencies = [
+ "nano_rustc_span",
+]
+
+[[package]]
+name = "nano_rustc_span"
+version = "0.0.0"
+dependencies = [
+ "nano_rustc_data_structures",
+]

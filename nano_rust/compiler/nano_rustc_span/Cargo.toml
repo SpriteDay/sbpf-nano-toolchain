@@ -1,0 +1,7 @@
+[package]
+name = "nano_rustc_span"
+version = "0.0.0"
+edition = "2024"
+
+[dependencies]
+nano_rustc_data_structures = { path = "../nano_rustc_data_structures" }
