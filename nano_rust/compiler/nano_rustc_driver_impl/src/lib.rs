@@ -4,6 +4,21 @@ pub use nano_rustc_span::fatal_error::catch_fatal_errors;
 
 pub mod args;
 
+pub enum HandledOptions {
+    /// Parsing failed, or we parsed a flag causing an early exit
+    None,
+    /// Successful parsing
+    Normal(getopts::Matches),
+    /// Parsing succeeded, but we received one or more `help` flags
+    /// The compiler should proceed only until a possible `-W help` flag has been processed
+    HelpOnly(getopts::Matches),
+}
+
+/// Process command line options. Emits messages as appropriate. If compilation
+/// should continue, returns a getopts::Matches object parsed from args,
+/// otherwise returns `None`
+fn handle_options(args: &[String]) -> HandledOptions {}
+
 /// This is the primary entry point for nano_rustc.
 pub fn run_compiler(at_args: &[String]) {
     let at_args = at_args.get(1..).unwrap_or_default();

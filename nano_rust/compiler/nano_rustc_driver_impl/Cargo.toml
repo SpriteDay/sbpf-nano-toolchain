@@ -4,5 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+getopts = "0.2.24"
 nano_rustc_span = { path = "../nano_rustc_span" }
 shlex = "=2.0.1"
