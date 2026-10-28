@@ -2,6 +2,8 @@ use std::process::{ExitCode, Termination};
 
 pub use nano_rustc_span::fatal_error::catch_fatal_errors;
 
+use nano_rustc_session::getopts;
+
 pub mod args;
 
 pub enum HandledOptions {
@@ -17,7 +19,11 @@ pub enum HandledOptions {
 /// Process command line options. Emits messages as appropriate. If compilation
 /// should continue, returns a getopts::Matches object parsed from args,
 /// otherwise returns `None`
-fn handle_options(args: &[String]) -> HandledOptions {}
+fn handle_options(args: &[String]) -> HandledOptions {
+    // Parse with *all* options defined in the compiler
+    let mut options = getopts::Options::new();
+    let optgroups = config::nano_rustc_optgroups();
+}
 
 /// This is the primary entry point for nano_rustc.
 pub fn run_compiler(at_args: &[String]) {

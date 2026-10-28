@@ -33,9 +33,17 @@ dependencies = [
 name = "nano_rustc_driver_impl"
 version = "0.1.0"
 dependencies = [
- "getopts",
+ "nano_rustc_session",
  "nano_rustc_span",
  "shlex",
+]
+
+[[package]]
+name = "nano_rustc_session"
+version = "0.0.0"
+dependencies = [
+ "getopts",
+ "nano_rustc_span",
 ]
 
 [[package]]

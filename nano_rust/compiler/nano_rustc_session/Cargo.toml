@@ -1,0 +1,8 @@
+[package]
+name = "nano_rustc_session"
+version = "0.0.0"
+edition = "2024"
+
+[dependencies]
+getopts = "0.2.24"
+nano_rustc_span = { path = "../nano_rustc_span" }
