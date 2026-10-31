@@ -45,6 +45,24 @@ pub struct NanoRustcOptGroup {
     pub is_verbose_help_only: bool,
 }
 
+impl NanoRustcOptGroup {
+    pub fn apply(&self, options: &mut getopts::Options) {
+        let &Self {
+            short_name,
+            long_name,
+            desc,
+            value_hint,
+            ..
+        } = self;
+        match self.kind {
+            OptionKind::Opt => options.optopt(short_name, long_name, desc, value_hint),
+            OptionKind::Multi => options.optmulti(short_name, long_name, desc, value_hint),
+            OptionKind::Flag => options.optflag(short_name, long_name, desc),
+            OptionKind::FlagMulti => options.optflagmulti(short_name, long_name, desc),
+        };
+    }
+}
+
 pub fn make_opt(
     kind: OptionKind,
     short_name: &'static str,
