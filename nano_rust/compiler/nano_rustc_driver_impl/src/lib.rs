@@ -37,6 +37,12 @@ pub fn run_compiler(at_args: &[String]) {
     let at_args = at_args.get(1..).unwrap_or_default();
 
     let args = args::arg_expand_all(at_args);
+
+    let (matches, help_only) = match handle_options(&args) {
+        HandledOptions::None => return,
+        HandledOptions::Normal(matches) => (matches, false),
+        HandledOptions::HelpOnly(matches) => (matches, true),
+    };
 }
 
 /// Variant of `catch_fatal_erros` for the `interface::Result` return type
