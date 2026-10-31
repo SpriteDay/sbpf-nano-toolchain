@@ -1,4 +1,6 @@
-use std::cmp;
+use std::{cmp, path::PathBuf};
+
+use nano_rustc_span::FileName;
 
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum OptionKind {
@@ -123,4 +125,15 @@ pub fn nano_rustc_optgroups() -> Vec<NanoRustcOptGroup> {
     }));
 
     options
+}
+
+#[derive(Clone)]
+pub enum Input {
+    /// Load source code from a file
+    File(PathBuf),
+    /// Load source code from a string
+    Str {
+        /// A string that is shown in place of a filename
+        name: FileName,
+    },
 }

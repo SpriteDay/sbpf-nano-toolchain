@@ -2,9 +2,16 @@ use std::process::{ExitCode, Termination};
 
 pub use nano_rustc_span::fatal_error::catch_fatal_errors;
 
-use nano_rustc_session::{config, getopts};
+use nano_rustc_session::{
+    config::{self, Input},
+    getopts,
+};
 
 pub mod args;
+
+/// Extract input (string or file and optional path) from matches
+/// This handles reading from stdin if `-` is provided
+fn make_input(free_matches: &[String]) -> Option<Input> {}
 
 pub enum HandledOptions {
     /// Parsing failed, or we parsed a flag causing an early exit
