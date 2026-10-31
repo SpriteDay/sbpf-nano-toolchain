@@ -1,3 +1,5 @@
+use std::cmp;
+
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum OptionKind {
     /// An option that takes a value, and cannot appear more than once (e.g. `--out-dir`)
@@ -43,6 +45,29 @@ pub struct NanoRustcOptGroup {
     pub is_verbose_help_only: bool,
 }
 
+pub fn make_opt(
+    kind: OptionKind,
+    short_name: &'static str,
+    long_name: &'static str,
+    desc: &'static str,
+    value_hint: &'static str,
+) -> NanoRustcOptGroup {
+    // "Flag" options don't have a value, and therefore don't have a value hint
+    match kind {
+        OptionKind::Opt | OptionKind::Multi => {}
+        OptionKind::Flag | OptionKind::FlagMulti => assert_eq!(value_hint, ""),
+    };
+    NanoRustcOptGroup {
+        name: cmp::max_by_key(short_name, long_name, |s| s.len()),
+        kind,
+        short_name,
+        long_name,
+        desc,
+        value_hint,
+        is_verbose_help_only: false,
+    }
+}
+
 /// Returns all nano rustc command line options, including metadata for
 /// each option, such as whether the option is stable.
 ///
@@ -54,4 +79,6 @@ pub struct NanoRustcOptGroup {
 /// - `*`: a list element with description
 pub fn nano_rustc_optgroups() -> Vec<NanoRustcOptGroup> {
     use OptionKind::{Flag, FlagMulti, Multi, Opt};
+
+    use self::make_opt as opt;
 }
