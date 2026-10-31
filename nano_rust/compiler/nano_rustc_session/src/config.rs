@@ -81,4 +81,28 @@ pub fn nano_rustc_optgroups() -> Vec<NanoRustcOptGroup> {
     use OptionKind::{Flag, FlagMulti, Multi, Opt};
 
     use self::make_opt as opt;
+
+    let mut options = vec![
+        opt(FlagMulti, "g", "", "Equivalent to -C debuginfo=2", ""),
+        opt(FlagMulti, "O", "", "Equivalent to -C opt-level=3", ""),
+        opt(Opt, "o", "", "Write output to FILENAME", "<FILENAME>"),
+        opt(
+            Opt,
+            "",
+            "out-dir",
+            "Write output to compiler-chosen filename in DIR",
+            "<DIR>",
+        ),
+        opt(Flag, "v", "verbose", "Use verbose output", ""),
+    ];
+
+    // Options in this list are hidden from `nano_rustc --help` by default, but are
+    // shown by `rustc --help -v`
+    let verbose_only: [NanoRustcOptGroup; 0] = [];
+    options.extend(verbose_only.into_iter().map(|mut opt| {
+        opt.is_verbose_help_only = true;
+        opt
+    }));
+
+    options
 }
