@@ -2,7 +2,7 @@ use std::process::{ExitCode, Termination};
 
 pub use nano_rustc_span::fatal_error::catch_fatal_errors;
 
-use nano_rustc_session::getopts;
+use nano_rustc_session::{config, getopts};
 
 pub mod args;
 
@@ -23,6 +23,13 @@ fn handle_options(args: &[String]) -> HandledOptions {
     // Parse with *all* options defined in the compiler
     let mut options = getopts::Options::new();
     let optgroups = config::nano_rustc_optgroups();
+    for option in &optgroups {
+        option.apply(&mut options);
+    }
+    let matches = options.parse(args).unwrap_or_else(|e| {
+        panic!("{e}");
+    });
+    HandledOptions::Normal(matches)
 }
 
 /// This is the primary entry point for nano_rustc.
