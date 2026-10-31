@@ -1,4 +1,7 @@
-use std::process::{ExitCode, Termination};
+use std::{
+    path::PathBuf,
+    process::{ExitCode, Termination},
+};
 
 pub use nano_rustc_span::fatal_error::catch_fatal_errors;
 
@@ -10,8 +13,15 @@ use nano_rustc_session::{
 pub mod args;
 
 /// Extract input (string or file and optional path) from matches
-/// This handles reading from stdin if `-` is provided
-fn make_input(free_matches: &[String]) -> Option<Input> {}
+fn make_input(free_matches: &[String]) -> Option<Input> {
+    match free_matches {
+        [] => None, // no input: we will exit early
+        [ifile] => Some(Input::File(PathBuf::from(ifile))),
+        [ifile1, ifile2, ..] => panic!(
+            "Multiple input filenames provided (first two filenames are `{ifile1}` and `{ifile2}`)"
+        ),
+    }
+}
 
 pub enum HandledOptions {
     /// Parsing failed, or we parsed a flag causing an early exit
@@ -45,11 +55,14 @@ pub fn run_compiler(at_args: &[String]) {
 
     let args = args::arg_expand_all(at_args);
 
-    let (matches, help_only) = match handle_options(&args) {
+    let (matches, _help_only) = match handle_options(&args) {
         HandledOptions::None => return,
         HandledOptions::Normal(matches) => (matches, false),
         HandledOptions::HelpOnly(matches) => (matches, true),
     };
+
+    let input = make_input(&matches.free);
+    let has_input = input.is_some();
 }
 
 /// Variant of `catch_fatal_erros` for the `interface::Result` return type
