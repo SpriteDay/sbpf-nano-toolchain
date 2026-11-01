@@ -39,6 +39,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "nano_rustc_interface"
+version = "0.0.0"
+
+[[package]]
 name = "nano_rustc_session"
 version = "0.0.0"
 dependencies = [
