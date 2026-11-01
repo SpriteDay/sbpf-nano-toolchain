@@ -1,5 +1,6 @@
 /// Used as a return value to signify a fatal error occured
 #[derive(Copy, Clone, Debug)]
+#[must_use]
 pub struct FatalError;
 
 use std::panic;
