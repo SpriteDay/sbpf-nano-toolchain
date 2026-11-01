@@ -6,11 +6,21 @@ use std::{
 pub use nano_rustc_span::fatal_error::catch_fatal_errors;
 
 use nano_rustc_session::{
-    config::{self, Input},
+    config::{self, Input, OutFileName},
     getopts,
 };
 
 pub mod args;
+
+/// Extract output directory and file from matches
+fn make_output(matches: &getopts::Matches) -> (Option<PathBuf>, Option<OutFileName>) {
+    let odir = matches.opt_str("out-dir").map(|o| PathBuf::from(&o));
+    let ofile = matches.opt_str("o").map(|o| match o.as_str() {
+        "-" => OutFileName::Stdout,
+        path => OutFileName::Real(PathBuf::from(path)),
+    });
+    (odir, ofile)
+}
 
 /// Extract input (string or file and optional path) from matches
 fn make_input(free_matches: &[String]) -> Option<Input> {
@@ -63,6 +73,9 @@ pub fn run_compiler(at_args: &[String]) {
 
     let input = make_input(&matches.free);
     let has_input = input.is_some();
+    let (odir, ofile) = make_output(&matches);
+
+    
 }
 
 /// Variant of `catch_fatal_erros` for the `interface::Result` return type

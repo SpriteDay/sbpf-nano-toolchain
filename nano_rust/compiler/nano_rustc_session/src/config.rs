@@ -137,3 +137,9 @@ pub enum Input {
         name: FileName,
     },
 }
+
+#[derive(Clone, Hash, Debug, PartialEq, Eq)]
+pub enum OutFileName {
+    Real(PathBuf),
+    Stdout,
+}
