@@ -1,3 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["compiler/nano_rustc", "compiler/nano_rustc_session", "nano_rustc_interface"]
+members = [
+    "compiler/nano_rustc",
+    "compiler/nano_rustc_session",
+    "compiler/nano_rustc_interface",
+]
