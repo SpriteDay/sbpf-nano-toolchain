@@ -104,7 +104,6 @@ pub fn nano_rustc_optgroups() -> Vec<NanoRustcOptGroup> {
 
     let mut options = vec![
         opt(FlagMulti, "g", "", "Equivalent to -C debuginfo=2", ""),
-        opt(FlagMulti, "O", "", "Equivalent to -C opt-level=3", ""),
         opt(Opt, "o", "", "Write output to FILENAME", "<FILENAME>"),
         opt(
             Opt,
@@ -112,6 +111,13 @@ pub fn nano_rustc_optgroups() -> Vec<NanoRustcOptGroup> {
             "out-dir",
             "Write output to compiler-chosen filename in DIR",
             "<DIR>",
+        ),
+        opt(
+            Multi,
+            "C",
+            "codegen",
+            "Set a codegen option",
+            "<OPT>[=<VALUE>]",
         ),
         opt(Flag, "v", "verbose", "Use verbose output", ""),
     ];
