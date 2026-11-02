@@ -4,6 +4,22 @@ use nano_rustc_span::FileName;
 
 pub use crate::options::*;
 
+#[derive(Clone, Copy, Debug, PartialEq, Hash)]
+pub enum OptLevel {
+    /// `-Copt-level=0`
+    No,
+    /// `-Copt-level=1`
+    Less,
+    /// `-Copt-level=2`
+    More,
+    /// `-Copt-level=3` / `-O`
+    Aggressive,
+    /// `-Copt-level=s`
+    Size,
+    /// `-Copt-level=z`
+    SizeMin,
+}
+
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum OptionKind {
     /// An option that takes a value, and cannot appear more than once (e.g. `--out-dir`)
