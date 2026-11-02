@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 getopts = "0.2.24"
+nano_rustc_hir = { path = "../nano_rustc_hir" }
 nano_rustc_span = { path = "../nano_rustc_span" }

@@ -40,14 +40,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "nano_rustc_hir"
+version = "0.0.0"
+
+[[package]]
 name = "nano_rustc_interface"
 version = "0.0.0"
+dependencies = [
+ "nano_rustc_session",
+]
 
 [[package]]
 name = "nano_rustc_session"
 version = "0.0.0"
 dependencies = [
  "getopts",
+ "nano_rustc_hir",
  "nano_rustc_span",
 ]
 

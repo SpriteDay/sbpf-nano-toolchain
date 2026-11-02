@@ -74,8 +74,6 @@ pub fn run_compiler(at_args: &[String]) {
     let input = make_input(&matches.free);
     let has_input = input.is_some();
     let (odir, ofile) = make_output(&matches);
-
-    
 }
 
 /// Variant of `catch_fatal_erros` for the `interface::Result` return type

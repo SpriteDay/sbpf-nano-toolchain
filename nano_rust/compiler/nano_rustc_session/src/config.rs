@@ -2,6 +2,8 @@ use std::{cmp, path::PathBuf};
 
 use nano_rustc_span::FileName;
 
+pub use crate::options::*;
+
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum OptionKind {
     /// An option that takes a value, and cannot appear more than once (e.g. `--out-dir`)
@@ -149,3 +151,5 @@ pub enum OutFileName {
     Real(PathBuf),
     Stdout,
 }
+
+pub use nano_rustc_hir::attrs::CrateType;
