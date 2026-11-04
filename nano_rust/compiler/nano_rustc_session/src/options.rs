@@ -1,4 +1,4 @@
-use nano_rustc_span::edition::Edition;
+use nano_rustc_span::{RealFileName, edition::Edition};
 
 use crate::config::*;
 
@@ -12,4 +12,7 @@ pub struct Options {
 
     crate_name: Option<String>,
     edition: Edition,
+
+    /// The (potentially remapped) working directory
+    working_dir: RealFileName,
 }
