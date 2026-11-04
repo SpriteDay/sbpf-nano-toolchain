@@ -170,6 +170,7 @@ pub enum OutFileName {
 
 pub use nano_rustc_hir::attrs::CrateType;
 
+#[derive(Clone, Debug, Hash)]
 pub struct OutputTypes(BTreeMap<OutputType, Option<OutFileName>>);
 
 macro_rules! define_output_types {
@@ -181,12 +182,12 @@ macro_rules! define_output_types {
                 extension: $extension:expr,
                 description: $description:expr,
                 default_filename: $default_filename:expr,
-                it_text: $is_text:expr,
+                is_text: $is_text:expr,
                 compatible_with_cgus_and_single_output: $compatible:expr
             }
         ),* $(,)?
     ) => {
-        #[derive()]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, PartialOrd, Ord)]
         pub enum OutputType {
             $(
                 $(#[doc = $doc])*
@@ -196,4 +197,21 @@ macro_rules! define_output_types {
     };
 }
 
-define_output_types! {}
+define_output_types! {
+    Assembly => {
+        shorthand: "asm",
+        extension: "s",
+        description: "Generates a file with crate's assembly code",
+        default_filename: "CRATE_NAME.s",
+        is_text: true,
+        compatible_with_cgus_and_single_output: false
+    },
+    LlvmAssembly => {
+        shorthand: "llvm-ir",
+        extension: "ll",
+        description: "Generates a file containing LLVM IR",
+        default_filename: "CRATE_NAME.ll",
+        is_text: true,
+        compatible_with_cgus_and_single_output: false
+    },
+}
