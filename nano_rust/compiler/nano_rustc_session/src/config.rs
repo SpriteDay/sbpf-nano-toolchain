@@ -1,4 +1,4 @@
-use std::{cmp, path::PathBuf};
+use std::{cmp, collections::BTreeMap, path::PathBuf};
 
 use nano_rustc_span::FileName;
 
@@ -169,3 +169,21 @@ pub enum OutFileName {
 }
 
 pub use nano_rustc_hir::attrs::CrateType;
+
+pub struct OutputTypes(BTreeMap<OutputType, Option<OutFileName>>);
+
+macro_rules! define_output_types {
+    (
+        $(
+            $(#[doc = $doc:expr])*
+            $Variant:ident => {
+                shorthand: $shorthand:expr,
+                extension: $extension:expr,
+                description: $description:expr,
+                default_filename: $default_filename:expr,
+                it_text: $is_text:expr,
+                compatible_with_cgus_and_single_output: $compatible:expr
+            }
+        ),* $(,)?
+    ) => {};
+}

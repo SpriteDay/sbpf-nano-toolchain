@@ -6,4 +6,5 @@ pub struct Options {
     /// with additional crate configurations during the compile process
     crate_types: Vec<CrateType>,
     optimize: OptLevel,
+    output_types: OutputTypes,
 }
