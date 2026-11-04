@@ -185,5 +185,15 @@ macro_rules! define_output_types {
                 compatible_with_cgus_and_single_output: $compatible:expr
             }
         ),* $(,)?
-    ) => {};
+    ) => {
+        #[derive()]
+        pub enum OutputType {
+            $(
+                $(#[doc = $doc])*
+                $Variant,
+            )*
+        }
+    };
 }
+
+define_output_types! {}
