@@ -121,6 +121,7 @@ pub fn nano_rustc_optgroups() -> Vec<NanoRustcOptGroup> {
     use self::make_opt as opt;
 
     let mut options = vec![
+        opt(Multi, "", "emit", "", "<TYPE>[=<FILE>]"),
         opt(FlagMulti, "g", "", "Equivalent to -C debuginfo=2", ""),
         opt(Opt, "o", "", "Write output to FILENAME", "<FILENAME>"),
         opt(
@@ -194,6 +195,17 @@ macro_rules! define_output_types {
                 $Variant,
             )*
         }
+
+        impl OutputType {
+            fn from_shorthand(shorthand: &str) -> Option<Self> {
+                match shorthand {
+                    $(
+                        s if s == $shorthand => Some(OutputType::$Variant),
+                    )*
+                    _ => None,
+                }
+            }
+        }
     };
 }
 
@@ -206,6 +218,14 @@ define_output_types! {
         is_text: true,
         compatible_with_cgus_and_single_output: false
     },
+    Exe => {
+        shorthand: "link",
+        extension: "",
+        description: "Generates the crates specified by --crate-type. This is the default if --emit is not specified",
+        default_filename: "(platform and crate-type dependant)",
+        is_text: false,
+        compatible_with_cgus_and_single_output: false
+    },
     LlvmAssembly => {
         shorthand: "llvm-ir",
         extension: "ll",
@@ -216,14 +236,46 @@ define_output_types! {
     },
 }
 
+fn parse_output_types(matches: &getopts::Matches) -> OutputTypes {
+    let mut output_types = BTreeMap::new();
+    if true {
+        for list in matches.opt_strs("emit") {
+            for output_type in list.split(',') {
+                let (shorthand, path) = split_out_file_name(output_type);
+                let output_type = OutputType::from_shorthand(shorthand)
+                    .unwrap_or_else(|| panic!("Unknown emission type: `{shorthand}`"));
+                output_types.insert(output_type, path);
+            }
+        }
+    }
+    if output_types.is_empty() {
+        output_types.insert(OutputType::Exe, None);
+    };
+    OutputTypes(output_types)
+}
+
+fn split_out_file_name(arg: &str) -> (&str, Option<OutFileName>) {
+    match arg.split_once('=') {
+        None => (arg, None),
+        Some((kind, "-")) => (kind, Some(OutFileName::Stdout)),
+        Some((kind, path)) => (kind, Some(OutFileName::Real(PathBuf::from(path)))),
+    }
+}
+
 pub fn build_session_options(matches: &getopts::Matches) -> Options {
     let edition = Edition::Edition2024;
+
+    let unparsed_crate_types = matches.opt_strs("crate-type");
+    let crate_types =
+        parse_crate_types_from_list(unparsed_crate_types).unwrap_or_else(|e| panic!("{e}"));
+
+    let output_types = parse_output_types(matches);
 }
 
 pub fn parse_crate_types_from_list(list_list: Vec<String>) -> Result<Vec<CrateType>, String> {
     let mut crate_types: Vec<CrateType> = Vec::new();
     for unparsed_crate_type in &list_list {
-        for part in unparsed_crate_type.split(",") {
+        for part in unparsed_crate_type.split(',') {
             let new_part = match part {
                 "lib" => CrateType::default(),
                 "rlib" => CrateType::Rlib,
