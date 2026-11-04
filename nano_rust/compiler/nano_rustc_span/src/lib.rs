@@ -2,6 +2,8 @@
 
 use std::path::PathBuf;
 
+pub mod edition;
+
 pub mod fatal_error;
 
 /// The inner workings of `RealFileName`

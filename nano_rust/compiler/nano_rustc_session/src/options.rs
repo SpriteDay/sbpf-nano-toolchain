@@ -1,3 +1,5 @@
+use nano_rustc_span::edition::Edition;
+
 use crate::config::*;
 
 /// The top-level command-line options struct
@@ -7,4 +9,7 @@ pub struct Options {
     crate_types: Vec<CrateType>,
     optimize: OptLevel,
     output_types: OutputTypes,
+
+    crate_name: Option<String>,
+    edition: Edition,
 }
