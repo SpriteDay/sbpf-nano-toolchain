@@ -3,6 +3,7 @@ use std::{
     process::{ExitCode, Termination},
 };
 
+use nano_rustc_interface::interface;
 pub use nano_rustc_span::fatal_error::catch_fatal_errors;
 
 use nano_rustc_session::{
@@ -71,9 +72,13 @@ pub fn run_compiler(at_args: &[String]) {
         HandledOptions::HelpOnly(matches) => (matches, true),
     };
 
+    let sopts = config::build_session_options(&matches);
+
     let input = make_input(&matches.free);
     let has_input = input.is_some();
     let (odir, ofile) = make_output(&matches);
+
+    let mut config = interface::Config { opts: sopts };
 }
 
 /// Variant of `catch_fatal_erros` for the `interface::Result` return type

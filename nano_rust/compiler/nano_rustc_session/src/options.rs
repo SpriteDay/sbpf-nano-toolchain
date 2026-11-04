@@ -10,7 +10,6 @@ pub struct Options {
     optimize: OptLevel,
     output_types: OutputTypes,
 
-    crate_name: Option<String>,
     edition: Edition,
 
     /// The (potentially remapped) working directory

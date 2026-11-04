@@ -1,6 +1,6 @@
 use std::{cmp, collections::BTreeMap, path::PathBuf};
 
-use nano_rustc_span::FileName;
+use nano_rustc_span::{FileName, edition::Edition};
 
 pub use crate::options::*;
 
@@ -214,4 +214,36 @@ define_output_types! {
         is_text: true,
         compatible_with_cgus_and_single_output: false
     },
+}
+
+pub fn build_session_options(matches: &getopts::Matches) -> Options {
+    let edition = Edition::Edition2024;
+}
+
+pub fn parse_crate_types_from_list(list_list: Vec<String>) -> Result<Vec<CrateType>, String> {
+    let mut crate_types: Vec<CrateType> = Vec::new();
+    for unparsed_crate_type in &list_list {
+        for part in unparsed_crate_type.split(",") {
+            let new_part = match part {
+                "lib" => CrateType::default(),
+                "rlib" => CrateType::Rlib,
+                "staticlib" => CrateType::StaticLib,
+                "dylib" => CrateType::Dylib,
+                "cdylib" => CrateType::Cdylib,
+                "bin" => CrateType::Executable,
+                "proc-macro" => CrateType::ProcMacro,
+                _ => {
+                    return Err(format!(
+                        "Unknown crate type: `{part}`, expected one of \
+                    `lib`, `rlib`, `staticlib`, `dylib`, `cdylib`, `bin`, `proc-macro`"
+                    ));
+                }
+            };
+            if !crate_types.contains(&new_part) {
+                crate_types.push(new_part)
+            }
+        }
+    }
+
+    Ok(crate_types)
 }
