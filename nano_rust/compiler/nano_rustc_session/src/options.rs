@@ -6,14 +6,11 @@ use crate::config::*;
 pub struct Options {
     /// The crate config requested for the session, which may be combined
     /// with additional crate configurations during the compile process
-    crate_types: Vec<CrateType>,
-    optimize: OptLevel,
-    output_types: OutputTypes,
+    pub crate_types: Vec<CrateType>,
+    pub optimize: OptLevel,
+    pub output_types: OutputTypes,
 
-    edition: Edition,
-
-    /// The (potentially remapped) working directory
-    working_dir: RealFileName,
+    pub edition: Edition,
 }
 
 pub mod parse {

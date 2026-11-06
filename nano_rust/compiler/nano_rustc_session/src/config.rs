@@ -314,6 +314,15 @@ pub fn build_session_options(matches: &getopts::Matches) -> Options {
     let mut cg = CodegenOptions::build(matches);
 
     let cg = cg;
+
+    let opt_level = parse_opt_level(matches, &cg);
+
+    Options {
+        crate_types,
+        optimize: opt_level,
+        output_types,
+        edition,
+    }
 }
 
 pub fn parse_crate_types_from_list(list_list: Vec<String>) -> Result<Vec<CrateType>, String> {
