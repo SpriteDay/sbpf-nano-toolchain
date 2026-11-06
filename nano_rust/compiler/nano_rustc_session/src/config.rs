@@ -270,6 +270,8 @@ pub fn build_session_options(matches: &getopts::Matches) -> Options {
         parse_crate_types_from_list(unparsed_crate_types).unwrap_or_else(|e| panic!("{e}"));
 
     let output_types = parse_output_types(matches);
+
+    let mut cg = CodegenOptions::build();
 }
 
 pub fn parse_crate_types_from_list(list_list: Vec<String>) -> Result<Vec<CrateType>, String> {

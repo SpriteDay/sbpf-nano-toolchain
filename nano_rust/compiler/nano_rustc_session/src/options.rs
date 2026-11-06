@@ -15,3 +15,90 @@ pub struct Options {
     /// The (potentially remapped) working directory
     working_dir: RealFileName,
 }
+
+/// Defines all `CodegenOptions`/`DebuggingOptions` fields and parsers all at once. The goal of this
+/// macro is to define an interface that can be programmatically used by the option parser
+/// to initialize the struct without hardcoding field names all over the place
+macro_rules! options {
+    ($struct_name:ident, $stat:ident, $optmod:ident, $prefix:expr, $outputname:expr,
+    $($( #[attr:meta] )* $opt:ident : $t:ty = (
+        $init:expr,
+        $parse:ident,
+        $desc:expr
+    )),* ,) => {
+        #[derive(Clone)]
+        pub struct $struct_name { $( $( #[attr] )* pub $opt: $t ),* }
+
+        impl Default for $struct_name {
+            fn default() -> $struct_name {
+                $struct_name { $($opt: $init),* }
+            }
+        }
+
+        impl $struct_name {
+            pub fn build(
+                matches: &getopts::Matches,
+            ) -> $struct_name {
+                build_options(matches, $stat, $prefix, $outputname)
+            }
+        }
+
+        pub const $stat: OptionDescrs<$struct_name> =
+            &[ $( OptionDesc{ name: stringify!($opt), setter: $optmod::$opt,
+                type_desc: desc::$parse, desc: $desc }),* ];
+    };
+}
+
+type OptionSetter<O> = fn(&mut O, v: Option<&str>) -> bool;
+type OptionDescrs<O> = &'static [OptionDesc<O>];
+
+pub struct OptionDesc<O> {
+    name: &'static str,
+    setter: OptionSetter<O>,
+    // description for return value/type from mod desc
+    type_desc: &'static str,
+}
+
+fn build_options<O: Default>(
+    matches: &getopts::Matches,
+    descrs: OptionDescrs<O>,
+    prefix: &str,
+    outputname: &str,
+) -> O {
+    let mut op = O::default();
+    for option in matches.opt_strs(prefix) {
+        let (key, value) = match option.split_once('=') {
+            None => (option, None),
+            Some((k, v)) => (k.to_string(), Some(v)),
+        };
+
+        let option_to_lookup = key.replace('-', "_");
+        match descrs
+            .iter()
+            .find(|opt_desc| opt_desc.name == option_to_lookup)
+        {
+            Some(OptionDesc {
+                name: _,
+                setter,
+                type_desc,
+            }) => {
+                if !setter(&mut op, value) {
+                    match value {
+                        None => panic!(
+                            "{outputname} option `{key}` requires {type_desc} (`-{prefix} {key}=<value>`)"
+                        ),
+                        Some(value) => panic!(
+                            "Incorrect value `{value}` for {outputname} option `{key}` - {type_desc} was expected"
+                        ),
+                    }
+                }
+            }
+            None => panic!("Unknown {outputname} option: `{key}`"),
+        };
+    }
+    op
+}
+
+options! {
+    CodegenOptions, CG_OPTIONS, cgopts, "C", "codegen",
+}
