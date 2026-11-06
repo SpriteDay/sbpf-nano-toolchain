@@ -32,10 +32,34 @@ pub mod parse {
         }
     }
 
+    /// Use this for any string option that lacks a static default.
+    pub(crate) fn parse_opt_string(slot: &mut Option<String>, v: Option<&str>) -> bool {
+        match v {
+            Some(s) => {
+                *slot = Some(s.to_string());
+                true
+            }
+            None => false,
+        }
+    }
+
     pub(crate) fn parse_list(slot: &mut Vec<String>, v: Option<&str>) -> bool {
         match v {
             Some(s) => {
                 slot.extend(s.split_whitespace().map(|s| s.to_string()));
+                true
+            }
+            None => false,
+        }
+    }
+
+    pub(crate) fn parse_target_feature(slot: &mut String, v: Option<&str>) -> bool {
+        match v {
+            Some(s) => {
+                if !slot.is_empty() {
+                    slot.push(',');
+                }
+                slot.push_str(s);
                 true
             }
             None => false,
@@ -154,11 +178,15 @@ fn build_options<O: Default>(
 #[allow(non_upper_case_globals)]
 mod desc {
     pub(crate) const parse_string: &str = "A string";
+    pub(crate) const parse_opt_string: &str = parse_string;
     pub(crate) const parse_list: &str = "A space-separated list of strings";
+    pub(crate) const parse_target_feature: &str = parse_string;
 }
 
 options! {
     CodegenOptions, CG_OPTIONS, cgopts, "C", "codegen",
     llvm_args: Vec<String> = (Vec::new(), parse_list, "A list of arguments to ass to LLVM (space separated)"),
     opt_level: String = ("0".to_string(), parse_string, "Optimization level (0-3, s, or z; default: 0)"),
+    target_cpu: Option<String> = (None, parse_opt_string, "Select target processor"),
+    target_feature: String = (String::new(), parse_target_feature, "Target specific attributes"),
 }
