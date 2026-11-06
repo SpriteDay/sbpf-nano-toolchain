@@ -21,6 +21,17 @@ pub mod parse {
 
     pub(crate) use super::*;
 
+    /// Use this for any string option that has a static default
+    pub(crate) fn parse_string(slot: &mut String, v: Option<&str>) -> bool {
+        match v {
+            Some(s) => {
+                *slot = s.to_string();
+                true
+            }
+            None => false,
+        }
+    }
+
     pub(crate) fn parse_list(slot: &mut Vec<String>, v: Option<&str>) -> bool {
         match v {
             Some(s) => {
@@ -140,7 +151,14 @@ fn build_options<O: Default>(
     op
 }
 
+#[allow(non_upper_case_globals)]
+mod desc {
+    pub(crate) const parse_string: &str = "A string";
+    pub(crate) const parse_list: &str = "A space-separated list of strings";
+}
+
 options! {
     CodegenOptions, CG_OPTIONS, cgopts, "C", "codegen",
     llvm_args: Vec<String> = (Vec::new(), parse_list, "A list of arguments to ass to LLVM (space separated)"),
+    opt_level: String = ("0".to_string(), parse_string, "Optimization level (0-3, s, or z; default: 0)"),
 }
