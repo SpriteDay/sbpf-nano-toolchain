@@ -16,18 +16,34 @@ pub struct Options {
     working_dir: RealFileName,
 }
 
+pub mod parse {
+    use std::str::FromStr;
+
+    pub(crate) use super::*;
+
+    pub(crate) fn parse_list(slot: &mut Vec<String>, v: Option<&str>) -> bool {
+        match v {
+            Some(s) => {
+                slot.extend(s.split_whitespace().map(|s| s.to_string()));
+                true
+            }
+            None => false,
+        }
+    }
+}
+
 /// Defines all `CodegenOptions`/`DebuggingOptions` fields and parsers all at once. The goal of this
 /// macro is to define an interface that can be programmatically used by the option parser
 /// to initialize the struct without hardcoding field names all over the place
 macro_rules! options {
     ($struct_name:ident, $stat:ident, $optmod:ident, $prefix:expr, $outputname:expr,
-    $($( #[attr:meta] )* $opt:ident : $t:ty = (
+    $($( #[$attr:meta] )* $opt:ident : $t:ty = (
         $init:expr,
         $parse:ident,
         $desc:expr
     )),* ,) => {
         #[derive(Clone)]
-        pub struct $struct_name { $( $( #[attr] )* pub $opt: $t ),* }
+        pub struct $struct_name { $( $( #[$attr] )* pub $opt: $t ),* }
 
         impl Default for $struct_name {
             fn default() -> $struct_name {
@@ -46,6 +62,28 @@ macro_rules! options {
         pub const $stat: OptionDescrs<$struct_name> =
             &[ $( OptionDesc{ name: stringify!($opt), setter: $optmod::$opt,
                 type_desc: desc::$parse, desc: $desc }),* ];
+
+        mod $optmod {
+        $(
+            pub(super) fn $opt(cg: &mut super::$struct_name, v: Option<&str>) -> bool {
+                super::parse::$parse(&mut redirect_field!(cg.$opt), v)
+            }
+        )*
+        }
+    };
+}
+
+// Sometimes different options need to build a common structure.
+// That structure can be kept in one of the options' fields, the others become dummy
+macro_rules! redirect_field {
+    ($cg:ident.link_arg) => {
+        $cg.link_args
+    };
+    ($cg:ident.pre_link_arg) => {
+        $cg.pre_link_args
+    };
+    ($cg:ident.$field:ident) => {
+        $cg.$field
     };
 }
 
@@ -57,6 +95,8 @@ pub struct OptionDesc<O> {
     setter: OptionSetter<O>,
     // description for return value/type from mod desc
     type_desc: &'static str,
+    // description for option from options table
+    desc: &'static str,
 }
 
 fn build_options<O: Default>(
@@ -81,6 +121,7 @@ fn build_options<O: Default>(
                 name: _,
                 setter,
                 type_desc,
+                ..
             }) => {
                 if !setter(&mut op, value) {
                     match value {
@@ -101,4 +142,5 @@ fn build_options<O: Default>(
 
 options! {
     CodegenOptions, CG_OPTIONS, cgopts, "C", "codegen",
+    llvm_args: Vec<String> = (Vec::new(), parse_list, "A list of arguments to ass to LLVM (space separated)"),
 }
