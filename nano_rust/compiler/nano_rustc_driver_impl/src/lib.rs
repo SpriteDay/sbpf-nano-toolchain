@@ -78,7 +78,12 @@ pub fn run_compiler(at_args: &[String]) {
     let has_input = input.is_some();
     let (odir, ofile) = make_output(&matches);
 
-    let mut config = interface::Config { opts: sopts };
+    let mut config = interface::Config {
+        opts: sopts,
+        input: input.unwrap_or(Input::File(PathBuf::new())),
+        output_file: ofile,
+        output_dir: odir,
+    };
 }
 
 /// Variant of `catch_fatal_erros` for the `interface::Result` return type
