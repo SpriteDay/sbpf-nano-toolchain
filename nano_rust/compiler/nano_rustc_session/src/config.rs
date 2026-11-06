@@ -262,6 +262,46 @@ fn split_out_file_name(arg: &str) -> (&str, Option<OutFileName>) {
     }
 }
 
+fn parse_opt_level(matches: &getopts::Matches, cg: &CodegenOptions) -> OptLevel {
+    // The `-O` and `-C opt-level` flags specify the same setting, so we want to be able
+    // to use them interchangably. However, because they're technically different flags,
+    // we need to work out manually which should take precedence if both are supplied (i.e.
+    // the rightmost flag). We do this by finding the (rightmost) position of both flags and
+    // comparing them. Note that if a flag is not found, its position will be `None`, which
+    // always compared less than `Some(_)`
+    let max_o = matches.opt_positions("O").into_iter().max();
+    let max_c = matches
+        .opt_strs_pos("C")
+        .into_iter()
+        .flat_map(|(i, s)| {
+            // NB: This can match a string without `=`
+            if let Some("opt-level") = s.split('=').next() {
+                Some(i)
+            } else {
+                None
+            }
+        })
+        .max();
+    if max_o > max_c {
+        OptLevel::Aggressive
+    } else {
+        match cg.opt_level.as_ref() {
+            "0" => OptLevel::No,
+            "1" => OptLevel::Less,
+            "2" => OptLevel::More,
+            "3" => OptLevel::Aggressive,
+            "s" => OptLevel::Size,
+            "z" => OptLevel::SizeMin,
+            arg => {
+                panic!(
+                    "Optimization level needs to be \
+                            between 0-3, s or z (instead was `{arg}`)"
+                );
+            }
+        }
+    }
+}
+
 pub fn build_session_options(matches: &getopts::Matches) -> Options {
     let edition = Edition::Edition2024;
 
@@ -271,7 +311,9 @@ pub fn build_session_options(matches: &getopts::Matches) -> Options {
 
     let output_types = parse_output_types(matches);
 
-    let mut cg = CodegenOptions::build();
+    let mut cg = CodegenOptions::build(matches);
+
+    let cg = cg;
 }
 
 pub fn parse_crate_types_from_list(list_list: Vec<String>) -> Result<Vec<CrateType>, String> {
