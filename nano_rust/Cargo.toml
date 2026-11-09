@@ -3,5 +3,5 @@ resolver = "3"
 members = [
     "compiler/nano_rustc",
     "compiler/nano_rustc_session",
-    "compiler/nano_rustc_interface", "compiler/nano_rustc_hir",
+    "compiler/nano_rustc_interface", "compiler/nano_rustc_hir", "compiler/nano_rustc_target",
 ]

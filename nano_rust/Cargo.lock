@@ -48,6 +48,7 @@ name = "nano_rustc_interface"
 version = "0.0.0"
 dependencies = [
  "nano_rustc_session",
+ "nano_rustc_target",
 ]
 
 [[package]]
@@ -65,6 +66,10 @@ version = "0.0.0"
 dependencies = [
  "nano_rustc_data_structures",
 ]
+
+[[package]]
+name = "nano_rustc_target"
+version = "0.0.0"
 
 [[package]]
 name = "shlex"
