@@ -22,5 +22,22 @@ macro_rules! target_spec_enum {
                 $Variant,
             )*
         }
+
+        impl FromStr for $Name {
+            type Err = String;
+
+            fn from_str(s: &str) -> Result<Self, Self::Err> {
+                Ok(match s {
+                    $(
+                        $string => Self::$Variant,
+                        $($alias => Self::$Variant,)*
+                    )*
+                    _ => {
+                        let all = [$( concat!("'", $string, "'") ),*].join(", ");
+                        return Err(format!("Invalid {}: '{s}'. Allowed values: {all}", $parse_error_type));
+                    }
+                })
+            }
+        }
     };
 }
