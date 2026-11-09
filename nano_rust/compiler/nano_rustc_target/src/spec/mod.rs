@@ -1,4 +1,14 @@
 use std::borrow::Cow;
+use std::str::FromStr;
+
+use crate::json::ToJson;
+
+crate::target_spec_enum! {
+    pub enum Arch {
+        Sbf = "sbf",
+    }
+    other_variant = Other;
+}
 
 /// Everything `nano_rustc` knows about how to compile for a specific target
 ///
