@@ -39,5 +39,14 @@ macro_rules! target_spec_enum {
                 })
             }
         }
+
+        impl $Name {
+            pub const ALL: &'static [$Name] = &[ $( $Name::$Variant, )* ];
+            pub fn desc(&self) -> &'static str {
+                match self {
+                    $( Self::$Variant => &string, )*
+                }
+            }
+        }
     };
 }
