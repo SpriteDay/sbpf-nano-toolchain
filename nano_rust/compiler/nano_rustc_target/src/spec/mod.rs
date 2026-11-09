@@ -15,6 +15,7 @@ pub struct Target {
     pub metadata: TargetMetdata,
     /// Number of bits in a pointer. Influences the `taget_pointer_width` `cfg` variable
     pub pointer_width: u16,
+    pub arch: Arch,
 }
 
 /// Metadata about a target like the description or tier
