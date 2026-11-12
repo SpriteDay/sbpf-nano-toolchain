@@ -1,6 +1,8 @@
 use std::borrow::Cow;
 use std::str::FromStr;
 
+use nano_rustc_abi::Endian;
+
 use crate::json::ToJson;
 
 crate::target_spec_enum! {
@@ -25,7 +27,12 @@ pub struct Target {
     pub metadata: TargetMetdata,
     /// Number of bits in a pointer. Influences the `taget_pointer_width` `cfg` variable
     pub pointer_width: u16,
+    /// Architecture to use for ABI considerations
     pub arch: Arch,
+    /// [Data Layout](https://llvm.org/docs/LangRef.html#data-layout) to pass to LLVM
+    pub data_layout: StaticCow<str>,
+    /// Optional settings with defaults
+    pub options: TargetOptions,
 }
 
 /// Metadata about a target like the description or tier
@@ -44,3 +51,8 @@ pub struct TargetMetdata {
 }
 
 type StaticCow<T> = Cow<'static, T>;
+
+#[derive(PartialEq, Clone, Debug)]
+pub struct TargetOptions {
+    pub endian: Endian,
+}

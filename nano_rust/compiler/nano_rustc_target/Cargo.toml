@@ -4,6 +4,7 @@ version = "0.0.0"
 edition = "2024"
 
 [dependencies]
+nano_rustc_abi = { path = "../nano_rustc_abi" }
 schemars = "1.2.3"
 serde = "1.0.229"
 serde_json = "1.0.154"

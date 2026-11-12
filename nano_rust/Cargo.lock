@@ -37,6 +37,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "nano_rustc_abi"
+version = "0.0.0"
+
+[[package]]
 name = "nano_rustc_data_structures"
 version = "0.0.0"
 
@@ -89,6 +93,7 @@ dependencies = [
 name = "nano_rustc_target"
 version = "0.0.0"
 dependencies = [
+ "nano_rustc_abi",
  "schemars",
  "serde",
  "serde_json",
