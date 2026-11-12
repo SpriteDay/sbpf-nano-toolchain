@@ -12,6 +12,13 @@ crate::target_spec_enum! {
     other_variant = Other;
 }
 
+crate::target_spec_enum! {
+    pub enum Os {
+        Solana = "solana",
+    }
+    other_variant = Other;
+}
+
 /// Everything `nano_rustc` knows about how to compile for a specific target
 ///
 /// Every field here must be specified, and has no default value
@@ -64,4 +71,8 @@ type StaticCow<T> = Cow<'static, T>;
 pub struct TargetOptions {
     /// Used as the `target_endian` `cfg` variable. Defaults to little endian
     pub endian: Endian,
+    /// Width of c_int type
+    pub c_int_width: u16,
+    /// OS name to use for conditional compilation (`target_os`)
+    pub os: Os,
 }
