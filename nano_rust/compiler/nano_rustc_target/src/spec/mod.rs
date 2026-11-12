@@ -52,7 +52,16 @@ pub struct TargetMetdata {
 
 type StaticCow<T> = Cow<'static, T>;
 
+/// Optional aspects of a target spec
+///
+/// This has an implementation of `Default`, see each field for what default is. In general,
+/// these try to make "minimal defaults" that don't assume anything about the runtime they run in
+///
+/// `TargetOptions` as a separate structure is mostly an implementation detail of `Target`
+/// construction, all its fields logically belong to `Target` and available from `Target`
+/// through `Deref` impls
 #[derive(PartialEq, Clone, Debug)]
 pub struct TargetOptions {
+    /// Used as the `target_endian` `cfg` variable. Defaults to little endian
     pub endian: Endian,
 }
