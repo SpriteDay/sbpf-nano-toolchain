@@ -173,4 +173,8 @@ pub struct TargetOptions {
     /// Whether to disable linking to the default libraries, typically corresponds
     /// to `-nodefaultlibs`
     pub no_default_libraries: bool,
+    /// Dynamically linked executables can be compiled as position independent
+    /// if the default relocation model of position independent code is not
+    /// changed
+    pub position_independent_executables: bool,
 }
