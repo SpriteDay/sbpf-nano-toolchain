@@ -64,6 +64,17 @@ crate::target_spec_enum! {
 }
 
 crate::target_spec_enum! {
+    pub enum RelroLevel {
+        Full = "full",
+        Partial = "partial",
+        Off = "off",
+        None = "none",
+    }
+
+    parse_error_type = "relro level";
+}
+
+crate::target_spec_enum! {
     pub enum Arch {
         Sbf = "sbf",
     }
@@ -177,4 +188,8 @@ pub struct TargetOptions {
     /// if the default relocation model of position independent code is not
     /// changed
     pub position_independent_executables: bool,
+    /// Either partial, full, or off. Full RELRO makes the dynamic linker
+    /// resolve all symbols at startup and marks the GOT read-only before
+    /// starting the program, preventing overwriting the GOT
+    pub relro_level: RelroLevel,
 }
