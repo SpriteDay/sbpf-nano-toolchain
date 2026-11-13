@@ -216,5 +216,11 @@ pub struct TargetOptions {
     /// Panic strategy: "unwind" or "abort"
     pub panic_strategy: PanicStrategy,
 
+    /// The default visbiility for symbols in this target
     pub default_visibility: Option<SymbolVisibility>,
+
+    /// Whether the linker is instructed to add a `GNU_EH_FRAME` ELF header
+    /// used to locate unwinding information is passed
+    /// (only has effect if the linker is `ld`-like)
+    pub eh_frame_header: bool,
 }
