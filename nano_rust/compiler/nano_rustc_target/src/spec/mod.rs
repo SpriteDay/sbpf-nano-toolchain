@@ -170,4 +170,7 @@ pub struct TargetOptions {
     pub dll_suffix: StaticCow<str>,
     /// Target's binary file format
     pub binary_format: BinaryFormat,
+    /// Whether to disable linking to the default libraries, typically corresponds
+    /// to `-nodefaultlibs`
+    pub no_default_libraries: bool,
 }
