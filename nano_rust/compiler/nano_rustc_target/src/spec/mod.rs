@@ -75,6 +75,16 @@ crate::target_spec_enum! {
 }
 
 crate::target_spec_enum! {
+    pub enum SymbolVisibility {
+        Hidden = "hidden",
+        Protected = "protected",
+        Interposable = "interposable",
+    }
+
+    parse_error_type = "symbol visibility";
+}
+
+crate::target_spec_enum! {
     pub enum PanicStrategy {
         Unwind = "unwind",
         Abort = "abort",
@@ -205,4 +215,6 @@ pub struct TargetOptions {
 
     /// Panic strategy: "unwind" or "abort"
     pub panic_strategy: PanicStrategy,
+
+    pub default_visibility: Option<SymbolVisibility>,
 }
