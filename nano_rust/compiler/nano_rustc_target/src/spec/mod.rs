@@ -3,17 +3,26 @@ use std::str::FromStr;
 
 use nano_rustc_abi::Endian;
 
+/// Linker is called through a C/C++ compiler
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum Cc {
     Yes,
     No,
 }
 
+/// Linker is LLD
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum Lld {
     Yes,
     No,
 }
 
+/// All linkers have some kinds of command line interfaces and nano_rustc needs to know which commands
+/// to use with each of them. So we cluster all such interfaces into a number of classes
+/// that we call "linker flavors"
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum LinkerFlavor {
+    /// Unix-like linker with GNU extensions (both naked and compiler-wrapped forms).
     Gnu(Cc, Lld),
 }
 
