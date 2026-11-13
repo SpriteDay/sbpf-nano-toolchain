@@ -121,4 +121,8 @@ pub struct TargetOptions {
     /// Corresponds to `llc -mattr=$llvm_features` where `$llvm_features` is the
     /// result of mapping the NanoRust features in this field to LLVM features
     pub features: StaticCow<str>,
+    /// Whether dynamic linking is available on this target
+    pub dynamic_linking: bool,
+    /// If dynamic linking is available, whether only cdylibs are supported
+    pub only_cdylib: bool,
 }
