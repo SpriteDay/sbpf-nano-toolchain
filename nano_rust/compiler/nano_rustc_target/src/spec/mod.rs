@@ -3,7 +3,19 @@ use std::str::FromStr;
 
 use nano_rustc_abi::Endian;
 
-use crate::json::ToJson;
+pub enum Cc {
+    Yes,
+    No,
+}
+
+pub enum Lld {
+    Yes,
+    No,
+}
+
+pub enum LinkerFlavor {
+    Gnu(Cc, Lld),
+}
 
 crate::target_spec_enum! {
     pub enum Arch {
@@ -75,4 +87,10 @@ pub struct TargetOptions {
     pub c_int_width: u16,
     /// OS name to use for conditional compilation (`target_os`)
     pub os: Os,
+
+    /// Linker to invoke
+    pub linker: Option<StaticCow<str>>,
+    /// Default linker flavor used if `-C linker-flavor` or `-C linker` are not passed
+    /// on the command line. Defaults to `LinkerFlavor::Gnu(Cc::Yes, Lld::No)`
+    pub linker_flavor: LinkerFlavor,
 }
