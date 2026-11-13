@@ -158,4 +158,6 @@ pub struct TargetOptions {
     pub code_model: Option<CodeModel>,
     /// String to prepend to the name of every dynamic library
     pub dll_prefix: StaticCow<str>,
+    /// String to append to the name of every dynamic library
+    pub dll_suffix: StaticCow<str>,
 }
