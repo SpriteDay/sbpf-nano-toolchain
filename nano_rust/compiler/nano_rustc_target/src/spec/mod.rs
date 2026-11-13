@@ -156,4 +156,6 @@ pub struct TargetOptions {
     pub relocation_model: RelocModel,
     /// Code model to use. Corresponds to `llc -code-model=$code_model`
     pub code_model: Option<CodeModel>,
+    /// String to prepend to the name of every dynamic library
+    pub dll_prefix: StaticCow<str>,
 }
