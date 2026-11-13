@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::collections::BTreeMap;
 use std::str::FromStr;
 
 use nano_rustc_abi::Endian;
@@ -25,6 +26,8 @@ pub enum LinkerFlavor {
     /// Unix-like linker with GNU extensions (both naked and compiler-wrapped forms).
     Gnu(Cc, Lld),
 }
+
+pub type LinkArgs = BTreeMap<LinkerFlavor, Vec<StaticCow<str>>>;
 
 crate::target_spec_enum! {
     pub enum Arch {
@@ -102,4 +105,7 @@ pub struct TargetOptions {
     /// Default linker flavor used if `-C linker-flavor` or `-C linker` are not passed
     /// on the command line. Defaults to `LinkerFlavor::Gnu(Cc::Yes, Lld::No)`
     pub linker_flavor: LinkerFlavor,
+
+    /// Linker arguments that are passed *before* any user-defined libraries
+    pub pre_link_args: LinkArgs,
 }
