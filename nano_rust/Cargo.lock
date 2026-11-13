@@ -80,6 +80,7 @@ dependencies = [
  "getopts",
  "nano_rustc_hir",
  "nano_rustc_span",
+ "nano_rustc_target",
 ]
 
 [[package]]

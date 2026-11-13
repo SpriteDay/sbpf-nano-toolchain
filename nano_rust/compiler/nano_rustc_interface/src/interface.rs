@@ -1,8 +1,9 @@
 use std::path::PathBuf;
 
-use nano_rustc_target::spec::Target;
-
-use nano_rustc_session::config::{self, Input, OutFileName};
+use nano_rustc_session::{
+    Session,
+    config::{self, Input, OutFileName},
+};
 
 /// Represents a compiler session. Note that every `Compiler` contains a
 /// `Session`, but `Compiler` also contains some things that cannot be in
@@ -13,12 +14,6 @@ use nano_rustc_session::config::{self, Input, OutFileName};
 /// Created by passing [`Config`] to [`run_compiler`]
 pub struct Compiler {
     pub sess: Session,
-}
-
-/// Represents the data associated with a compilation
-/// session for a single crate
-pub struct Session {
-    pub target: Target,
 }
 
 /// The compiler configuration

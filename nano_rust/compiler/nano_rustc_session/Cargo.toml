@@ -7,3 +7,4 @@ edition = "2024"
 getopts = "0.2.24"
 nano_rustc_hir = { path = "../nano_rustc_hir" }
 nano_rustc_span = { path = "../nano_rustc_span" }
+nano_rustc_target = { path = "../nano_rustc_target" }
