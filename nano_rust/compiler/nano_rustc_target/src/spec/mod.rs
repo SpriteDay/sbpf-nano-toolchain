@@ -40,7 +40,7 @@ crate::target_spec_enum! {
         RopiRwpi = "ropi-rwpi",
     }
 
-    parse_error_type = "relocation_model"
+    parse_error_type = "relocation_model";
 }
 
 crate::target_spec_enum! {
@@ -52,7 +52,15 @@ crate::target_spec_enum! {
         Large = "large",
     }
 
-    parse_error_type = "code model"
+    parse_error_type = "code model";
+}
+
+crate::target_spec_enum! {
+    pub enum BinaryFormat {
+        Elf = "elf",
+    }
+
+    parse_error_type = "binary format";
 }
 
 crate::target_spec_enum! {
@@ -160,4 +168,6 @@ pub struct TargetOptions {
     pub dll_prefix: StaticCow<str>,
     /// String to append to the name of every dynamic library
     pub dll_suffix: StaticCow<str>,
+    /// Target's binary file format
+    pub binary_format: BinaryFormat,
 }

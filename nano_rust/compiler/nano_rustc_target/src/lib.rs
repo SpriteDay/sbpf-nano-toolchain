@@ -9,7 +9,7 @@ macro_rules! target_spec_enum {    (
                 $Variant:ident = $string:literal $(,$alias:literal)* ,
             )*
         }
-        parse_error_type = $parse_error_type:literal
+        parse_error_type = $parse_error_type:literal;
     ) => {
         $( #[$attr] )*
         #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, PartialOrd, Ord)]
