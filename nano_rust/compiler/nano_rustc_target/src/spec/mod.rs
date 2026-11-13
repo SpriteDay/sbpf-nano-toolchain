@@ -75,6 +75,16 @@ crate::target_spec_enum! {
 }
 
 crate::target_spec_enum! {
+    pub enum PanicStrategy {
+        Unwind = "unwind",
+        Abort = "abort",
+        ImmediateAbort = "immediate-abort",
+    }
+
+    parse_error_type = "panic strategy";
+}
+
+crate::target_spec_enum! {
     pub enum Arch {
         Sbf = "sbf",
     }
@@ -192,4 +202,7 @@ pub struct TargetOptions {
     /// resolve all symbols at startup and marks the GOT read-only before
     /// starting the program, preventing overwriting the GOT
     pub relro_level: RelroLevel,
+
+    /// Panic strategy: "unwind" or "abort"
+    pub panic_strategy: PanicStrategy,
 }
