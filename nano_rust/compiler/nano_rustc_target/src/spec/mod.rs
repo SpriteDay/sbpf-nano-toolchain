@@ -223,4 +223,7 @@ pub struct TargetOptions {
     /// used to locate unwinding information is passed
     /// (only has effect if the linker is `ld`-like)
     pub eh_frame_header: bool,
+
+    /// Minimum number of bits in #[repr(C)] enum
+    pub c_enum_min_bits: Option<u64>,
 }
