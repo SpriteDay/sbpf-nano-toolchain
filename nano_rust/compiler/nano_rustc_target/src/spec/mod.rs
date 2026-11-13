@@ -113,4 +113,7 @@ pub struct TargetOptions {
     /// This is a string containing the script, not a path. Can only be applied
     /// to linkers where linker flavor matches `LinkerFlavor::Gnu(...)`
     pub link_script: Option<StaticCow<str>>,
+
+    /// Default CPU to pass to LLVM. Corresponds to `llc -mcpu=$cpu`
+    pub cpu: StaticCow<str>,
 }
