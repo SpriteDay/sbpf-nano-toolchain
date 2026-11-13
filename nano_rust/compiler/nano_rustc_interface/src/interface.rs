@@ -4,6 +4,7 @@ use nano_rustc_session::{
     Session,
     config::{self, Input, OutFileName},
 };
+use tracing::trace;
 
 /// Represents a compiler session. Note that every `Compiler` contains a
 /// `Session`, but `Compiler` also contains some things that cannot be in
@@ -26,4 +27,6 @@ pub struct Config {
     pub output_file: Option<OutFileName>,
 }
 
-pub fn run_compiler<R: Send>(config: Config, f: impl FnOnce(&Compiler) -> R + Send) -> R {}
+pub fn run_compiler<R: Send>(config: Config, f: impl FnOnce(&Compiler) -> R + Send) -> R {
+    trace!("run_compiler");
+}

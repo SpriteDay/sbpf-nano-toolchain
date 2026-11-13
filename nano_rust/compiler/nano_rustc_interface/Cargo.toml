@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 nano_rustc_session = { path = "../nano_rustc_session" }
 nano_rustc_target = { path = "../nano_rustc_target" }
+tracing = "0.1.44"
