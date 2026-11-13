@@ -44,6 +44,18 @@ crate::target_spec_enum! {
 }
 
 crate::target_spec_enum! {
+    pub enum CodeModel {
+        Tiny = "tiny",
+        Small = "small",
+        Kernel = "kernel",
+        Medium = "medium",
+        Large = "large",
+    }
+
+    parse_error_type = "code model"
+}
+
+crate::target_spec_enum! {
     pub enum Arch {
         Sbf = "sbf",
     }
@@ -142,4 +154,6 @@ pub struct TargetOptions {
     /// Relocation model, to use in object file. Corresponds to `llc
     /// -relocation-model=$relocation_model`
     pub relocation_model: RelocModel,
+    /// Code model to use. Corresponds to `llc -code-model=$code_model`
+    pub code_model: Option<CodeModel>,
 }
