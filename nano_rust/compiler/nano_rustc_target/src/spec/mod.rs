@@ -116,4 +116,9 @@ pub struct TargetOptions {
 
     /// Default CPU to pass to LLVM. Corresponds to `llc -mcpu=$cpu`
     pub cpu: StaticCow<str>,
+    /// Default (NanoRust) target features to enable for this target. These features
+    /// overwrite `-Ctarget-cpu` but can be overwritten with `-Ctarget-features`.
+    /// Corresponds to `llc -mattr=$llvm_features` where `$llvm_features` is the
+    /// result of mapping the NanoRust features in this field to LLVM features
+    pub features: StaticCow<str>,
 }
