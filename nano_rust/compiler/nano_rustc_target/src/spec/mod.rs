@@ -30,6 +30,20 @@ pub enum LinkerFlavor {
 pub type LinkArgs = BTreeMap<LinkerFlavor, Vec<StaticCow<str>>>;
 
 crate::target_spec_enum! {
+    pub enum RelocModel {
+        Static = "static",
+        Pic = "pic",
+        Pie = "pie",
+        DynamicNoPic = "dynamic-no-pic",
+        Ropi = "ropi",
+        Rwpi = "rwpi",
+        RopiRwpi = "ropi-rwpi",
+    }
+
+    parse_error_type = "relocation_model"
+}
+
+crate::target_spec_enum! {
     pub enum Arch {
         Sbf = "sbf",
     }
@@ -125,4 +139,7 @@ pub struct TargetOptions {
     pub dynamic_linking: bool,
     /// If dynamic linking is available, whether only cdylibs are supported
     pub only_cdylib: bool,
+    /// Relocation model, to use in object file. Corresponds to `llc
+    /// -relocation-model=$relocation_model`
+    pub relocation_model: RelocModel,
 }
