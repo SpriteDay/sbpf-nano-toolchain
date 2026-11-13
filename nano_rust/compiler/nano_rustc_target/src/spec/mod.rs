@@ -108,4 +108,9 @@ pub struct TargetOptions {
 
     /// Linker arguments that are passed *before* any user-defined libraries
     pub pre_link_args: LinkArgs,
+
+    /// Optional link script applied to `dylib` and `executable` crate types.
+    /// This is a string containing the script, not a path. Can only be applied
+    /// to linkers where linker flavor matches `LinkerFlavor::Gnu(...)`
+    pub link_script: Option<StaticCow<str>>,
 }
