@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use nano_rustc_data_structures::jobserver;
 use nano_rustc_session::{
     Session,
     config::{self, Input, OutFileName},
@@ -27,10 +28,18 @@ pub struct Config {
     pub output_file: Option<OutFileName>,
 }
 
-pub(crate) fn initialize_checked_jobserver() {}
+pub(crate) fn initialize_checked_jobserver() {
+    jobserver::initialize_checked(|err| {
+        println!("{err}");
+        println!("The build environment is likely misconfigured");
+    });
+}
 
 pub fn run_compiler<R: Send>(config: Config, f: impl FnOnce(&Compiler) -> R + Send) -> R {
     trace!("run_compiler");
 
     nano_rustc_data_structures::sync::set_dyn_thread_safe_mode(false);
+
+    // Check jobserver before run_in_thread_pool_with_globals, which calls jobserver::acquire_thread
+    initialize_checked_jobserver();
 }
