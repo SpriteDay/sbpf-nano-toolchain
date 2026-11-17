@@ -4,6 +4,7 @@ version = "0.0.0"
 edition = "2024"
 
 [dependencies]
+nano_rustc_data_structures = { path = "../nano_rustc_data_structures" }
 nano_rustc_session = { path = "../nano_rustc_session" }
 nano_rustc_target = { path = "../nano_rustc_target" }
 tracing = "0.1.44"

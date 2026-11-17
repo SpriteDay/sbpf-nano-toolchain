@@ -29,4 +29,6 @@ pub struct Config {
 
 pub fn run_compiler<R: Send>(config: Config, f: impl FnOnce(&Compiler) -> R + Send) -> R {
     trace!("run_compiler");
+
+    nano_rustc_data_structures::sync::set_dyn_thread_safe_mode(false);
 }

@@ -69,6 +69,7 @@ version = "0.0.0"
 name = "nano_rustc_interface"
 version = "0.0.0"
 dependencies = [
+ "nano_rustc_data_structures",
  "nano_rustc_session",
  "nano_rustc_target",
  "tracing",

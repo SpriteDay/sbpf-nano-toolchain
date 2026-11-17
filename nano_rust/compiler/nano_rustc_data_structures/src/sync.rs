@@ -1,3 +1,5 @@
+pub use self::mode::set_dyn_thread_safe_mode;
+
 mod mode {
     use std::sync::atomic::{AtomicU8, Ordering};
 
