@@ -27,6 +27,8 @@ pub struct Config {
     pub output_file: Option<OutFileName>,
 }
 
+pub(crate) fn initialize_checked_jobserver() {}
+
 pub fn run_compiler<R: Send>(config: Config, f: impl FnOnce(&Compiler) -> R + Send) -> R {
     trace!("run_compiler");
 
