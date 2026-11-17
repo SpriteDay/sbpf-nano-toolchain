@@ -1,4 +1,4 @@
-use std::sync::LazyLock;
+use std::sync::{LazyLock, OnceLock};
 
 pub use jobserver_crate::Client;
 use jobserver_crate::{FromEnv, FromEnvErrorKind};
@@ -46,6 +46,15 @@ fn default_client() -> Client {
     client
 }
 
+static GLOBAL_CLIENT_CHECKED: OnceLock<Client> = OnceLock::new();
+
 pub fn initialize_checked(report_warning: impl FnOnce(&'static str)) {
-    // let client_checked = match
+    let client_checked = match &*GLOBAL_CLIENT {
+        Ok(client) => client.clone(),
+        Err(e) => {
+            report_warning(e);
+            default_client()
+        }
+    };
+    GLOBAL_CLIENT_CHECKED.set(client_checked).ok();
 }
