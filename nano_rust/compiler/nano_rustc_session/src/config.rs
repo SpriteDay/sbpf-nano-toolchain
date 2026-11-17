@@ -352,3 +352,12 @@ pub fn parse_crate_types_from_list(list_list: Vec<String>) -> Result<Vec<CrateTy
 
     Ok(crate_types)
 }
+
+pub fn build_target_config(target: &TargetTuple) {}
+
+/// Either a target tuple string or a path to a JSON file
+#[derive(Clone, Debug)]
+pub enum TargetTuple {
+    TargetTuple(String),
+    TargetJson { tuple: String, contents: String },
+}
