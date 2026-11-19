@@ -1,6 +1,11 @@
-use std::{cmp, collections::BTreeMap, path::PathBuf};
+use std::{
+    cmp,
+    collections::BTreeMap,
+    path::{Path, PathBuf},
+};
 
 use nano_rustc_span::{FileName, edition::Edition};
+use nano_rustc_target::spec::{Target, TargetTuple};
 
 pub use crate::options::*;
 
@@ -353,11 +358,6 @@ pub fn parse_crate_types_from_list(list_list: Vec<String>) -> Result<Vec<CrateTy
     Ok(crate_types)
 }
 
-pub fn build_target_config(target: &TargetTuple) {}
-
-/// Either a target tuple string or a path to a JSON file
-#[derive(Clone, Debug)]
-pub enum TargetTuple {
-    TargetTuple(String),
-    TargetJson { tuple: String, contents: String },
+pub fn build_target_config(target: &TargetTuple, sysroot: &Path) -> Target {
+    match Target::search() {}
 }

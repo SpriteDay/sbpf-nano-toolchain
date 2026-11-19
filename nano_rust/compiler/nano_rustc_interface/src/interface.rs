@@ -42,4 +42,6 @@ pub fn run_compiler<R: Send>(config: Config, f: impl FnOnce(&Compiler) -> R + Se
 
     // Check jobserver before run_in_thread_pool_with_globals, which calls jobserver::acquire_thread
     initialize_checked_jobserver();
+
+    // crate::callbacks::setup_callbacks() - skipped for simplicity
 }

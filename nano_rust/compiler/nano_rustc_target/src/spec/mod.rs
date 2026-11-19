@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::collections::BTreeMap;
+use std::path::Path;
 use std::str::FromStr;
 
 use nano_rustc_abi::Endian;
@@ -28,6 +29,48 @@ pub enum LinkerFlavor {
 }
 
 pub type LinkArgs = BTreeMap<LinkerFlavor, Vec<StaticCow<str>>>;
+
+macro_rules! supported_targets {
+    ( $(($tuple:literal, $module:ident),)+ ) => {
+        mod targets {
+            $(pub(crate) mod $module;)+
+        }
+
+        /// List of supported targets
+        pub static TARGETS: &[&str] = &[$($tuple),+];
+
+        fn load_builtin(target: &str) -> Option<Target> {
+            let t = match target {
+                $( $tuple => targets::$module::target(), )+
+                _ => return None
+            }
+            debug!("Got builtin target: {:?}", t);
+            Some(t)
+        }
+
+        fn load_all_builtins() -> impl Iterator<Item = Target> {
+            [
+                $( targets::$module::target, )+
+                .into_iter()
+                .map(|f| f())
+            ]
+        }
+
+        #[cfg(test)]
+        mod tests {
+            $(
+                #[test] // `#[test]`
+                fn $module() {
+                    crate::spec:targets::$module::target().test_target()
+                }
+            )+
+        }
+    };
+}
+
+supported_targets!(
+    ("sbf-solana-solana", sbf_solana_solana),
+)
 
 crate::target_spec_enum! {
     pub enum RelocModel {
@@ -131,6 +174,27 @@ pub struct Target {
     pub options: TargetOptions,
 }
 
+impl Target {
+    pub fn search(
+        target_tuple: &TargetTuple,
+        sysroot: &Path,
+    ) -> Result<(Target, TargetWarnings), String> {
+        use std::{env, fs};
+
+        match *target_tuple {
+            TargetTuple::TargetTuple(ref target_tuple) => {}
+        }
+    }
+}
+
+/// Warnings encountered when parsing the target `json`
+///
+/// Includes fields that weren't recognized and fields that don't have the expected type
+#[derive(Debug, PartialEq)]
+pub struct TargetWarnings {
+    unused_fields: Vec<String>,
+}
+
 /// Metadata about a target like the description or tier
 #[derive(Default, PartialEq, Clone, Debug)]
 pub struct TargetMetdata {
@@ -226,4 +290,11 @@ pub struct TargetOptions {
 
     /// Minimum number of bits in #[repr(C)] enum
     pub c_enum_min_bits: Option<u64>,
+}
+
+/// Either a target tuple string or a path to a JSON file
+#[derive(Clone, Debug)]
+pub enum TargetTuple {
+    TargetTuple(String),
+    // TargetJson { tuple: String, contents: String },
 }
